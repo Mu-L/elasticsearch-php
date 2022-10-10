@@ -25,11 +25,12 @@ use Http\Promise\Promise;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
 
-final class Client
+final class Client implements ClientInterface
 {
     const CLIENT_NAME = 'es';
-    const VERSION = '8.3.0';
-
+    const VERSION = '8.5.0';
+    const API_COMPATIBILITY_HEADER = '%s/vnd.elasticsearch+%s; compatible-with=8';
+    
     use ClientEndpointsTrait;
     use EndpointTrait;
     use NamespaceTrait;
@@ -67,11 +68,17 @@ final class Client
         $this->defaultTransportSettings($this->transport);
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getTransport(): Transport
     {
         return $this->transport;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getLogger(): LoggerInterface
     {
         return $this->logger;
@@ -86,7 +93,7 @@ final class Client
     }
 
     /**
-     * Set the asyncronous HTTP request
+     * @inheritdoc
      */
     public function setAsync(bool $async): self
     {
@@ -95,7 +102,7 @@ final class Client
     }
 
     /**
-     * Get the asyncronous HTTP request setting
+     * @inheritdoc
      */
     public function getAsync(): bool
     {
@@ -103,7 +110,7 @@ final class Client
     }
 
     /**
-     * Enable or disable the x-elastic-client-meta header
+     * @inheritdoc
      */
     public function setElasticMetaHeader(bool $active): self
     {
@@ -112,7 +119,7 @@ final class Client
     }
 
     /**
-     * Get the status of x-elastic-client-meta header
+     * @inheritdoc
      */
     public function getElasticMetaHeader(): bool
     {
@@ -120,7 +127,7 @@ final class Client
     }
 
     /**
-     * Enable or disable the response Exception
+     * @inheritdoc
      */
     public function setResponseException(bool $active): self
     {
@@ -129,7 +136,7 @@ final class Client
     }
 
     /**
-     * Get the status of response Exception
+     * @inheritdoc
      */
     public function getResponseException(): bool
     {
@@ -137,10 +144,7 @@ final class Client
     }
 
     /**
-     * Send the HTTP request using the Elastic Transport.
-     * It manages syncronous and asyncronus requests using Client::getAsync()
-     * 
-     * @return Elasticsearch|Promise
+     * @inheritdoc
      */
     public function sendRequest(RequestInterface $request)
     {   

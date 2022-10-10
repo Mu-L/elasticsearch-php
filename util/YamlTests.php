@@ -1,18 +1,15 @@
 <?php
 /**
- * Elasticsearch PHP client
+ * Elasticsearch PHP Client
  *
- * @link      https://github.com/elastic/elasticsearch-php/
+ * @link      https://github.com/elastic/elasticsearch-php
  * @copyright Copyright (c) Elasticsearch B.V (https://www.elastic.co)
- * @license   http://www.apache.org/licenses/LICENSE-2.0 Apache License, Version 2.0
- * @license   https://www.gnu.org/licenses/lgpl-2.1.html GNU Lesser General Public License, Version 2.1 
- * 
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
  * Licensed to Elasticsearch B.V under one or more agreements.
- * Elasticsearch B.V licenses this file to you under the Apache 2.0 License or
- * the GNU Lesser General Public License, Version 2.1, at your option.
+ * Elasticsearch B.V licenses this file to you under the MIT License.
  * See the LICENSE file in the project root for more information.
  */
-
 declare(strict_types = 1);
 
 namespace Elastic\Elasticsearch\Util;
@@ -38,7 +35,8 @@ class YamlTests
     const YAML_FILES_TO_OMIT = [
         'platinum/eql/10_basic.yml',
         // use of _internal APIs
-        'free/cluster.desired_nodes/10_basic.yml', 
+        'free/cluster.desired_nodes/10_basic.yml',
+        'free/cluster.desired_nodes/20_dry_run.yml',
         'free/health/'
     ];
 
@@ -354,7 +352,7 @@ class YamlTests
             } elseif ($value instanceof \stdClass) {
                 $value = 'new \stdClass';
             } elseif (is_numeric($value)) {
-                $value = (string) $value;
+                $value = var_export($value, true);
             }
             $output = str_replace($name, $value, $output);
         }
